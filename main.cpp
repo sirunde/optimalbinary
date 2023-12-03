@@ -45,22 +45,19 @@ int optimalBST(vector<kf> kfs)
         {
             int j = i + d;
             int min = MAX;
-            // cout << "i = " << i << " j = " << j << endl;
             if (d != 1)
             {
                 for (int r = i; r < j; r++)
                 {
                     int c = cost[i][r] + cost[r + 1][j];
-                    // cout << "c = " << c << " " << i << " " << j << endl;
                     if (c < min)
                     {
                         min = c;
                         root[i][j] = r;
                     }
                 }
-                cost[i][j] = min + sum(kfs, i, j);
+                cost[i][j] = min + sum(kfs, i, j-1);
             }
-            // cout << "cost[" << i << "][" << j << "] = " << cost[i][j] << endl;
         }
     }
     return cost[0][n];
@@ -76,6 +73,12 @@ int main()
     kfs.push_back(kf(3, 5));
     kfs.push_back(kf(4, 20));
     kfs.push_back(kf(5, 30));
+    
+    // kfs.push_back(kf(1, 213));
+    // kfs.push_back(kf(2, 20));
+    // kfs.push_back(kf(3, 547));
+    // kfs.push_back(kf(4, 100));
+    // kfs.push_back(kf(5, 120));
 
     cout << "Search Cost of Optimal BST is " << optimalBST(kfs) << endl;
 
