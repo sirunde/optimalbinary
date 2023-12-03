@@ -6,13 +6,14 @@ private:
     /* data */
     int key;
     int freq;
+
 public:
     kf(int keys);
     kf(int keys, int freq);
     int getKey();
     int getFreq();
-    void changefq(int freq);
-    void changek(int key);
-    ~kf();
+    void changeKey(int key);
+    void changeFreq(int freq);
+    // ~kf();
 };
 #endif

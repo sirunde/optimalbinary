@@ -1,95 +1,91 @@
-// copy and paste from geeks.
-// we need to change values.
-#include <utility>
+// successful search only
 #include <iostream>
-#include <bits/stdc++.h>
-#include <kf.h>
+#include <vector>
+#include "kf.h"
 
 using namespace std;
- 
-#define MAX 1000
 
+#define MAX 9999999
 
-
-// Declare global cost matrix
-int cost[MAX][MAX];
- 
 // Helper function to calculate the sum of frequencies from index i to j
-int Sum(vector<kf> kfs, int i, int j) {
+int sum(vector<kf> kfs, int i, int j)
+{
     int s = 0;
     for (int k = i; k <= j; k++)
         s += kfs[k].getFreq();
     return s;
 }
- 
-// Recursive function to find the optimal cost of a BST using memoization
-int optCost_memoized(vector<kf> kfs, int i, int j) {
-    // Reuse cost already calculated for the subproblems.
-    // Since we initialize cost matrix with 0 and frequency for a tree of one node,
-    // it can be used as a stop condition
-    if (cost[i][j])
-        return cost[i][j];
- 
-    // Get sum of freq[i], freq[i+1], ... freq[j]
-    int fsum = Sum(kfs, i, j);
- 
-    // Initialize minimum value
-    int Min = INT_MAX;
- 
-    // One by one consider all elements as
-    // root and recursively find cost of
-    // the BST, compare the cost with min
-    // and update min if needed
-    for (int r = i; r <= j; r++) {
-        int c = optCost_memoized(kfs, i, r - 1) + optCost_memoized(kfs, r + 1, j) + fsum;
-        if (c < Min) {
-            Min = c;
-            // replace cost with new optimal calc
-            cost[i][j] = c;
+
+// bottom up DP for filling in cost and root matrix
+// returns root matrix and optimal cost for bst
+int optimalBST(vector<kf> kfs)
+{
+    // initialize cost and root matrix
+    int n = kfs.size();
+    int cost[n + 1][n + 1];
+    int root[n + 1][n + 1];
+
+    for (int i = 0; i <= n; i++)
+    {
+        // fill diagonal with 0
+        cost[i][i] = 0;
+        // fill with freq of key
+        if (i < n)
+        {
+            cost[i][i + 1] = kfs[i].getFreq();
+            root[i][i + 1] = i + 1;
+        }
+        root[i][i] = i;
+    }
+
+    // fill in cost and root matrix by diagonals (top left to bottom right)
+    for (int d = 1; d <= kfs.size(); d++) // based on number of diagonal
+    {
+        for (int i = 0; i < kfs.size() - d + 1; i++)
+        {
+            int j = i + d;
+            int min = MAX;
+            // cout << "i = " << i << " j = " << j << endl;
+            if (d != 1)
+            {
+                for (int r = i; r < j; r++)
+                {
+                    int c = cost[i][r] + cost[r + 1][j];
+                    // cout << "c = " << c << " " << i << " " << j << endl;
+                    if (c < min)
+                    {
+                        min = c;
+                        root[i][j] = r;
+                    }
+                }
+                cost[i][j] = min + sum(kfs, i, j);
+            }
+            // cout << "cost[" << i << "][" << j << "] = " << cost[i][j] << endl;
         }
     }
- 
-    // Return minimum value
-    return cost[i][j];
+    return cost[0][n];
 }
- 
-// Main function to calculate the minimum cost of a BST
-int optimalSearchTree(vector<kf> kfs, int n) {
-    // Here array keys[] is assumed to be
-    // sorted in increasing order. If keys[]
-    // is not sorted, then add code to sort
-    // keys, and rearrange freq[] accordingly.
-    return optCost_memoized(kfs, 0, n - 1);
-}
- 
-int main() {
+
+int main()
+{
     // store keys and Freqs together
     // kf is class for holding key and freq same time
-    // to make it easy to sort if we add or remove later
-    vector<kf> kfs{{10,38},{12,8},{20,50}};
+    vector<kf> kfs;
+    kfs.push_back(kf(1, 25));
+    kfs.push_back(kf(2, 20));
+    kfs.push_back(kf(3, 5));
+    kfs.push_back(kf(4, 20));
+    kfs.push_back(kf(5, 30));
 
-    // size of keys
-    int n = (kfs.size());
- 
-    // cost[i][j] = Optimal cost of binary search
-    // tree that can be formed from keys[i] to keys[j].
-    // cost[0][n-1] will store the resultant cost
-    // memset(cost, 0, sizeof(cost));
-    vector<vector<int>> cost(kfs.size(),vector<int>(kfs.size()));
- 
-    // For a single key, cost is equal to
-    // frequency of the key
-    for (int i = 0; i < n; i++)
-        cost[i][i] = kfs[i].getFreq();
- 
-    cout << "Cost of Optimal BST is " << optimalSearchTree(kfs, n) << endl;
+    cout << "Search Cost of Optimal BST is " << optimalBST(kfs) << endl;
 
-    // implement adding keys
+    // to do:
 
+    // implement adding keys based on user input
     // show based on freq of input(change freq of key)
     // should have faster time
- 
-    // remove keys?
-    
+    // remove keys
+    // print optimal bst structure
+
     return 0;
 }

@@ -1,4 +1,4 @@
-#include <kf.h>
+#include "kf.h"
 
 kf::kf(int keys)
 {
@@ -18,15 +18,14 @@ int kf::getFreq(){
     return this->freq;
 }
 
-void kf::changek(int key){
+void kf::changeKey(int key){
     this->key = key; 
 }
 
-
-void kf::changefq(int freq){
+void kf::changeFreq(int freq){
     this->freq = freq;
 }
 
-kf::~kf()
-{
-}
+// kf::~kf()
+// {
+// }
