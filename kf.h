@@ -1,18 +1,23 @@
+
 #ifndef KF_H
 #define KF_H
+
+#include <stdlib.h>
+#include <string>
+using namespace std;
 class kf
 {
 private:
     /* data */
-    int key;
+    string key;
     int freq;
 
 public:
-    kf(int keys);
-    kf(int keys, int freq);
-    int getKey();
+    kf(string keys);
+    kf(string keys, int freq);
+    string getKey();
     int getFreq();
-    void changeKey(int key);
+    void changeKey(string key);
     void changeFreq(int freq);
     // ~kf();
 };

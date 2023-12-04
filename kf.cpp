@@ -1,28 +1,32 @@
 #include "kf.h"
 
-kf::kf(int keys)
+kf::kf(string keys)
 {
     this->key = keys;
-    freq = 0;
+    this->freq = 0;
 }
-kf::kf(int key, int freq)
+kf::kf(string keys, int freq)
 {
-    this->key = key;
+    this->key = keys;
     this->freq = freq;
 }
 
-int kf::getKey(){
+string kf::getKey()
+{
     return this->key;
 }
-int kf::getFreq(){
+int kf::getFreq()
+{
     return this->freq;
 }
 
-void kf::changeKey(int key){
-    this->key = key; 
+void kf::changeKey(string key)
+{
+    this->key = key;
 }
 
-void kf::changeFreq(int freq){
+void kf::changeFreq(int freq)
+{
     this->freq = freq;
 }
 

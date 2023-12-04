@@ -56,7 +56,7 @@ int optimalBST(vector<kf> kfs)
                         root[i][j] = r;
                     }
                 }
-                cost[i][j] = min + sum(kfs, i, j-1);
+                cost[i][j] = min + sum(kfs, i, j - 1);
             }
         }
     }
@@ -68,12 +68,12 @@ int main()
     // store keys and Freqs together
     // kf is class for holding key and freq same time
     vector<kf> kfs;
-    kfs.push_back(kf(1, 25));
-    kfs.push_back(kf(2, 20));
-    kfs.push_back(kf(3, 5));
-    kfs.push_back(kf(4, 20));
-    kfs.push_back(kf(5, 30));
-    
+    // kfs.push_back(kf(1, 25));
+    // kfs.push_back(kf(2, 20));
+    // kfs.push_back(kf(3, 5));
+    // kfs.push_back(kf(4, 20));
+    // kfs.push_back(kf(5, 30));
+
     // kfs.push_back(kf(1, 213));
     // kfs.push_back(kf(2, 20));
     // kfs.push_back(kf(3, 547));
