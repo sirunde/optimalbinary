@@ -41,9 +41,9 @@ tuple<int,vector<vector<int>>> optimalBST(vector<kf> kfs)
         if (i < n)
         {
             cost[i][i + 1] = kfs[i].getFreq();
-            root[i][i + 1] = i + 1;
+            root[i][i + 1] = i; //root table is 0 indexed always
         }
-        root[i][i] = i;
+        root[i][i] = 0;
     }
 
     // fill in cost and root matrix by diagonals (top left to bottom right)
@@ -61,7 +61,7 @@ tuple<int,vector<vector<int>>> optimalBST(vector<kf> kfs)
                     if (c < min)
                     {
                         min = c;
-                        root[i][j] = r;
+                        root[i][j] = r; //0 indexed
                     }
                 }
                 cost[i][j] = min + sum(kfs, i, j - 1);
@@ -103,23 +103,29 @@ void updateKey(std::vector<kf> kfs, std::string key){
 }
 //recursive call for each node
 BSTNode* buildBSTRecursive(int i, int j, vector<kf> kfs, vector<vector<int>> table){
-    if(i > j || i < 0 || j > kfs.size()){
+    if(i >= j || i < 0 || j < 0 || i > kfs.size() || j > kfs.size()){
         return NULL;
     }
     int root = table[i][j];
+    // cout << i << " " << j << " " << kfs[root].getKey() << endl;
     BSTNode* node = new BSTNode(kfs[root].getKey(), kfs[root].getFreq());
-    node->left = buildBSTRecursive(i, root-1, kfs, table);
+    if(i + 1 == j){
+        return node;
+    }
+    node->left = buildBSTRecursive(i, root, kfs, table);
     node->right = buildBSTRecursive(root+1, j, kfs, table);
     return node;
 }
 
 //build optimal bst from root matrix
+//each entry in root table represents index of key in kfs
 BST* buildOptimalBST(vector<kf> kfs, vector<vector<int>> table)
 {
     int n = kfs.size();
     int root = table[0][n];
+    // cout << root << kfs[root].getKey() << endl;
     BST* bst = new BST(kfs[root].getKey(), kfs[root].getFreq());
-    bst->root->left = buildBSTRecursive(0, root -1, kfs, table);
+    bst->root->left = buildBSTRecursive(0, root, kfs, table);
     bst->root->right = buildBSTRecursive(root+1, n, kfs, table);
     return bst;
 }
@@ -143,6 +149,7 @@ int main()
     // kfs.push_back(kf("D", 100));
     // kfs.push_back(kf("E", 120));
 
+    sort(kfs.begin(), kfs.end(), less_than_freq());
     tuple<int, vector<vector<int>>> result = optimalBST(kfs);
     vector<vector<int>> root = get<1>(result);
     int cost = get<0>(result);
@@ -154,15 +161,14 @@ int main()
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     cout << "Time taken to find and build optimal BST is " << duration.count() << "ms" << endl;
+
+    cout << endl;
     cout << "Printing BST: " << endl;
-    optimal_tree->print();
+    cout << "Root----------------->Leaf" << endl;
+    optimal_tree->print(optimal_tree->root,"",false);
 
     // to do:
 
-    // implement adding keys based on user input
-    // show based on freq of input(change freq of key)
-    // should have faster time
-    // remove keys
     // print optimal bst structure
 
     return 0;

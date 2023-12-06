@@ -15,7 +15,15 @@ BST::~BST()
     delete root;
 }
 
-void BST::print()
+void BST::print(BSTNode* node, const string& padding, bool isLeft)
 {
-    cout << root->key << endl;
+    if(node == NULL)
+    {
+        return;
+    }
+    cout << padding;
+    cout << (isLeft ? "L--" : "R--");
+    cout << "(" << node->key  << "," << node->freq << ")" << endl;
+    print(node->left, padding+ (isLeft ? "|  " : "   "), true);
+    print(node->right, padding+(isLeft ? "|  " : "   "), false);
 }

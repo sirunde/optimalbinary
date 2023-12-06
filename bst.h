@@ -13,7 +13,7 @@ public:
     // bool insert();
     // bool remove();
     // bool search();
-    void print();
+    void print(BSTNode *node, const string &padding, bool isLeft);
     BSTNode *root;
 };
 
