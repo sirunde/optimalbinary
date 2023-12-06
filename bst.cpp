@@ -1,4 +1,4 @@
-#include "BST.h"
+#include "bst.h"
 
 BST::BST(string key)
 {
@@ -13,4 +13,9 @@ BST::BST(string key, int freq)
 BST::~BST()
 {
     delete root;
+}
+
+void BST::print()
+{
+    cout << root->key << endl;
 }

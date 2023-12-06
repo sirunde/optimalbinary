@@ -2,18 +2,18 @@
 
 BSTNode::BSTNode(string key)
 {
-    key = key;
-    freq = 0;
-    left = NULL;
-    right = NULL;
+    this->key = key;
+    this->freq = 0;
+    this->left = NULL;
+    this->right = NULL;
 }
 
 BSTNode::BSTNode(string key, int freq)
 {
     this->key = key;
     this->freq = freq;
-    left = NULL;
-    right = NULL;
+    this->left = NULL;
+    this->right = NULL;
 }
 
 BSTNode::~BSTNode()

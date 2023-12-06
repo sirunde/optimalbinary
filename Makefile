@@ -1,9 +1,9 @@
 all: main
 
-main: main.o kf.o bst.o
+main: main.o kf.o bst.o bst_node.o
 	g++ main.o kf.o -o main
 
-main.o : main.cpp kf.h
+main.o : main.cpp kf.h bst.h bst_node.h
 	g++ -c main.cpp
 
 kf.o : kf.cpp kf.h
