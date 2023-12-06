@@ -8,11 +8,11 @@ class BSTNode
 {
 public:
     string key;
-    string freq;
+    int freq;
     BSTNode *left;
     BSTNode *right;
     BSTNode(string key);
-    BSTNode(string key, string freq);
+    BSTNode(string key, int freq);
     ~BSTNode();
 };
 

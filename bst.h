@@ -1,20 +1,19 @@
 #ifndef BST_H
 #define BST_H
 #include "bst_node.h"
+#include <iostream>
 
 class BST
 {
 public:
     BST(string key);
-    BST(string key, string freq);
+    BST(string key, int freq);
     ~BST();
 
-    bool insert();
-    bool remove();
+    // bool insert();
+    // bool remove();
     // bool search();
-    bool print();
-
-private:
+    void print();
     BSTNode *root;
 };
 

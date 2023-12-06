@@ -1,7 +1,11 @@
 // successful search only
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <tuple>
 #include "kf.h"
+#include "bst.h"
+#include "bst_node.h"
 
 using namespace std;
 
@@ -18,12 +22,16 @@ int sum(vector<kf> kfs, int i, int j)
 
 // bottom up DP for filling in cost and root matrix
 // returns root matrix and optimal cost for bst
-int optimalBST(vector<kf> kfs)
+tuple<int,vector<vector<int>>> optimalBST(vector<kf> kfs)
 {
     // initialize cost and root matrix
     int n = kfs.size();
-    int cost[n + 1][n + 1];
-    int root[n + 1][n + 1];
+    vector<vector<int>> cost(n+1);
+    vector<vector<int>> root(n+1);
+    for(int i = 0; i < n+1; i++){
+        cost[i].resize(n+1);
+        root[i].resize(n+1);
+    }
 
     for (int i = 0; i <= n; i++)
     {
@@ -60,27 +68,64 @@ int optimalBST(vector<kf> kfs)
             }
         }
     }
-    return cost[0][n];
+    return make_tuple(cost[0][n], root);
 }
+
+//recursive call for each node
+BSTNode* buildBSTRecursive(int i, int j, vector<kf> kfs, vector<vector<int>> table){
+    if(i > j || i < 0 || j > kfs.size()){
+        return NULL;
+    }
+    int root = table[i][j];
+    BSTNode* node = new BSTNode(kfs[root].getKey(), kfs[root].getFreq());
+    node->left = buildBSTRecursive(i, root-1, kfs, table);
+    node->right = buildBSTRecursive(root+1, j, kfs, table);
+    return node;
+}
+
+//build optimal bst from root matrix
+BST buildOptimalBST(vector<kf> kfs, vector<vector<int>> table)
+{
+    int n = kfs.size();
+    int root = table[0][n];
+    BST bst(kfs[root].getKey(), kfs[root].getFreq());
+    bst.root->left = buildBSTRecursive(0, root -1, kfs, table);
+    bst.root->right = buildBSTRecursive(root+1, n, kfs, table);
+    return bst;
+}
+
 
 int main()
 {
     // store keys and Freqs together
     // kf is class for holding key and freq same time
+    auto start = chrono::high_resolution_clock::now();
     vector<kf> kfs;
-    // kfs.push_back(kf(1, 25));
-    // kfs.push_back(kf(2, 20));
-    // kfs.push_back(kf(3, 5));
-    // kfs.push_back(kf(4, 20));
-    // kfs.push_back(kf(5, 30));
+    kfs.push_back(kf("A", 25));
+    kfs.push_back(kf("B", 20));
+    kfs.push_back(kf("C", 5));
+    kfs.push_back(kf("D", 20));
+    kfs.push_back(kf("E", 30));
 
-    // kfs.push_back(kf(1, 213));
-    // kfs.push_back(kf(2, 20));
-    // kfs.push_back(kf(3, 547));
-    // kfs.push_back(kf(4, 100));
-    // kfs.push_back(kf(5, 120));
+    // kfs.push_back(kf("A", 213));
+    // kfs.push_back(kf("B", 20));
+    // kfs.push_back(kf("C", 547));
+    // kfs.push_back(kf("D", 100));
+    // kfs.push_back(kf("E", 120));
 
-    cout << "Search Cost of Optimal BST is " << optimalBST(kfs) << endl;
+    tuple<int, vector<vector<int>>> result = optimalBST(kfs);
+    vector<vector<int>> root = get<1>(result);
+    int cost = get<0>(result);
+    BST optimal_tree = buildOptimalBST(kfs, root);
+
+    cout << "Search Cost of Optimal BST is " << cost  << endl;
+
+
+    auto stop = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+    cout << "Time taken to find and build optimal BST is " << duration.count() << "ms" << endl;
+    cout << "Printing BST: " << endl;
+    optimal_tree.print();
 
     // to do:
 
