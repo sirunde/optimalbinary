@@ -76,7 +76,7 @@ struct less_than_freq
 {
     inline bool operator() (const kf& struct1, const kf& struct2)
     {
-        return (struct1.getFreq() < struct2.getFreq());
+        return (struct1.getFreq() > struct2.getFreq());
     }
 };
 
@@ -114,13 +114,13 @@ BSTNode* buildBSTRecursive(int i, int j, vector<kf> kfs, vector<vector<int>> tab
 }
 
 //build optimal bst from root matrix
-BST buildOptimalBST(vector<kf> kfs, vector<vector<int>> table)
+BST* buildOptimalBST(vector<kf> kfs, vector<vector<int>> table)
 {
     int n = kfs.size();
     int root = table[0][n];
-    BST bst(kfs[root].getKey(), kfs[root].getFreq());
-    bst.root->left = buildBSTRecursive(0, root -1, kfs, table);
-    bst.root->right = buildBSTRecursive(root+1, n, kfs, table);
+    BST* bst = new BST(kfs[root].getKey(), kfs[root].getFreq());
+    bst->root->left = buildBSTRecursive(0, root -1, kfs, table);
+    bst->root->right = buildBSTRecursive(root+1, n, kfs, table);
     return bst;
 }
 
@@ -146,7 +146,7 @@ int main()
     tuple<int, vector<vector<int>>> result = optimalBST(kfs);
     vector<vector<int>> root = get<1>(result);
     int cost = get<0>(result);
-    BST optimal_tree = buildOptimalBST(kfs, root);
+    BST* optimal_tree = buildOptimalBST(kfs, root);
 
     cout << "Search Cost of Optimal BST is " << cost  << endl;
 
@@ -155,7 +155,7 @@ int main()
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     cout << "Time taken to find and build optimal BST is " << duration.count() << "ms" << endl;
     cout << "Printing BST: " << endl;
-    optimal_tree.print();
+    optimal_tree->print();
 
     // to do:
 
