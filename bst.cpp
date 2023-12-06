@@ -5,7 +5,7 @@ BST::BST(string key)
     root = new BSTNode(key);
 }
 
-BST::BST(string key, string freq)
+BST::BST(string key, int freq)
 {
     root = new BSTNode(key, freq);
 }

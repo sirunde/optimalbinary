@@ -1,26 +1,26 @@
 #include "kf.h"
 
-kf::kf(string keys)
+kf::kf(std::string keys)
 {
     this->key = keys;
     this->freq = 0;
 }
-kf::kf(string keys, int freq)
+kf::kf(std::string keys, int freq)
 {
     this->key = keys;
     this->freq = freq;
 }
 
-string kf::getKey()
+std::string kf::getKey() const
 {
     return this->key;
 }
-int kf::getFreq()
+int kf::getFreq() const
 {
     return this->freq;
 }
 
-void kf::changeKey(string key)
+void kf::changeKey(std::string key)
 {
     this->key = key;
 }
@@ -29,7 +29,12 @@ void kf::changeFreq(int freq)
 {
     this->freq = freq;
 }
-
+bool kf::operator==(const kf& rhs) const {
+    return this->key.compare(rhs.key) == 0;
+}
+bool kf::operator==(const std::string& key) const {
+    return this->key.compare(key) == 0;
+}
 // kf::~kf()
 // {
 // }

@@ -1,14 +1,14 @@
 // successful search only
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <bits/stdc++.h>
 #include "kf.h"
-
-using namespace std;
 
 #define MAX 9999999
 
 // Helper function to calculate the sum of frequencies from index i to j
-int sum(vector<kf> kfs, int i, int j)
+int sum(std::vector<kf> kfs, int i, int j)
 {
     int s = 0;
     for (int k = i; k <= j; k++)
@@ -18,7 +18,7 @@ int sum(vector<kf> kfs, int i, int j)
 
 // bottom up DP for filling in cost and root matrix
 // returns root matrix and optimal cost for bst
-int optimalBST(vector<kf> kfs)
+int optimalBST(std::vector<kf> kfs)
 {
     // initialize cost and root matrix
     int n = kfs.size();
@@ -63,11 +63,42 @@ int optimalBST(vector<kf> kfs)
     return cost[0][n];
 }
 
+// for sorting
+struct less_than_freq
+{
+    inline bool operator() (const kf& struct1, const kf& struct2)
+    {
+        return (struct1.getFreq() < struct2.getFreq());
+    }
+};
+
+void add(std::vector<kf> kfs, std::string key, int freq){
+    kfs.push_back(kf(key,freq));
+    std::sort(kfs.begin(),kfs.end(),less_than_freq());
+    optimalBST(kfs);
+}
+
+// Default freq is 1 if no freq is provided
+void updateFreq(std::vector<kf> kfs, std::string key, int freq = 1){
+    auto i = std::find(kfs.begin(),kfs.end(), key);
+    if(i != kfs.end()){
+        i->changeFreq(freq);
+    }
+    optimalBST(kfs);
+}
+
+void updateKey(std::vector<kf> kfs, std::string key){
+    auto i = std::find(kfs.begin(),kfs.end(), key);
+    if(i != kfs.end()){
+        i->changeKey(key);
+    }
+}
+
 int main()
 {
     // store keys and Freqs together
     // kf is class for holding key and freq same time
-    vector<kf> kfs;
+    std::vector<kf> kfs;
     // kfs.push_back(kf(1, 25));
     // kfs.push_back(kf(2, 20));
     // kfs.push_back(kf(3, 5));
@@ -80,7 +111,7 @@ int main()
     // kfs.push_back(kf(4, 100));
     // kfs.push_back(kf(5, 120));
 
-    cout << "Search Cost of Optimal BST is " << optimalBST(kfs) << endl;
+    std::cout << "Search Cost of Optimal BST is " << optimalBST(kfs) << std::endl;
 
     // to do:
 

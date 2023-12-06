@@ -6,7 +6,7 @@ class BST
 {
 public:
     BST(string key);
-    BST(string key, string freq);
+    BST(string key, int freq);
     ~BST();
 
     bool insert();
