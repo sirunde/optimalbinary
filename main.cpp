@@ -5,6 +5,9 @@
 #include <bits/stdc++.h>
 #include <chrono>
 #include <tuple>
+#include <random>
+#include <numeric>
+
 #include "kf.h"
 #include "bst.h"
 #include "bst_node.h"
@@ -76,7 +79,7 @@ struct less_than_freq
 {
     inline bool operator() (const kf& struct1, const kf& struct2)
     {
-        return (struct1.getFreq() > struct2.getFreq());
+        return (struct1.getKey() < struct2.getKey());
     }
 };
 
@@ -129,7 +132,10 @@ BST* buildOptimalBST(vector<kf> kfs, vector<vector<int>> table)
     bst->root->right = buildBSTRecursive(root+1, n, kfs, table);
     return bst;
 }
-
+float pointSumX(float lhs, const kf& rhs)
+{
+    return lhs + rhs.getFreq();
+}
 
 int main()
 {
@@ -149,7 +155,6 @@ int main()
     // kfs.push_back(kf("D", 100));
     // kfs.push_back(kf("E", 120));
 
-    sort(kfs.begin(), kfs.end(), less_than_freq());
     tuple<int, vector<vector<int>>> result = optimalBST(kfs);
     vector<vector<int>> root = get<1>(result);
     int cost = get<0>(result);
@@ -159,8 +164,8 @@ int main()
 
 
     auto stop = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-    cout << "Time taken to find and build optimal BST is " << duration.count() << "ms" << endl;
+    auto duration = chrono::duration<double>(stop - start);
+    cout << "Time taken to find and build optimal BST is " << duration.count() << " second" << endl;
 
     cout << endl;
     cout << "Printing BST: " << endl;
@@ -171,5 +176,33 @@ int main()
 
     // print optimal bst structure
 
+    vector<kf> testCase;
+    random_device dev;
+    mt19937 rng(dev());
+    uniform_int_distribution<std::mt19937::result_type> dist6(1,50);
+    for(int i = 0; i < 25;i++){
+        char a = 'a';
+        a += i;
+        string s(1,a);
+        testCase.push_back(kf(s,dist6(rng)));
+    }
+    // to make toatl 1, but not sure if we need it or not
+    // int sumAll = accumulate(kfs.begin(),kfs.end(),0,pointSumX);
+    result = optimalBST(testCase);
+    root = get<1>(result);
+    cost = get<0>(result);
+    optimal_tree = buildOptimalBST(testCase, root);
+
+    cout << "Search Cost of Optimal BST is " << cost  << endl;
+
+
+    stop = chrono::high_resolution_clock::now();
+    duration = chrono::duration<double>(stop - start);
+    cout << "Time taken to find and build optimal BST is " << duration.count() << " second" << endl;
+
+    cout << endl;
+    cout << "Printing BST: " << endl;
+    cout << "Root----------------->Leaf" << endl;
+    optimal_tree->print(optimal_tree->root,"",false);
     return 0;
 }
