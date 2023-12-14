@@ -148,6 +148,7 @@ int main()
     kfs.push_back(kf("C", 5));
     kfs.push_back(kf("D", 20));
     kfs.push_back(kf("E", 30));
+    sort(kfs.begin(),kfs.end(),less_than_freq());
 
     // kfs.push_back(kf("A", 213));
     // kfs.push_back(kf("B", 20));
@@ -180,29 +181,36 @@ int main()
     random_device dev;
     mt19937 rng(dev());
     uniform_int_distribution<std::mt19937::result_type> dist6(1,50);
-    for(int i = 0; i < 25;i++){
-        char a = 'a';
-        a += i;
-        string s(1,a);
-        testCase.push_back(kf(s,dist6(rng)));
+    int te[] = {100,500,1000};
+    for(auto j: te){
+        testCase.clear();
+        for(int i = 0; i < j;i++){
+            char a = 'a';
+            a += i;
+            string s(1,a);
+            testCase.push_back(kf(s,dist6(rng)));
+        }
+        sort(testCase.begin(),testCase.end(),less_than_freq());
+        // to make toatl 1, but not sure if we need it or not
+        // int sumAll = accumulate(kfs.begin(),kfs.end(),0,pointSumX);
+        result = optimalBST(testCase);
+        root = get<1>(result);
+        cost = get<0>(result);
+        optimal_tree = buildOptimalBST(testCase, root);
+
+        cout << "Search Cost of Optimal BST is " << cost  << endl;
+
+
+        stop = chrono::high_resolution_clock::now();
+        duration = chrono::duration<double>(stop - start);
+        cout << "Time taken to find and build optimal BST is " << duration.count() << " second for " << j << " nodes" << endl;
     }
-    // to make toatl 1, but not sure if we need it or not
-    // int sumAll = accumulate(kfs.begin(),kfs.end(),0,pointSumX);
-    result = optimalBST(testCase);
-    root = get<1>(result);
-    cost = get<0>(result);
-    optimal_tree = buildOptimalBST(testCase, root);
-
-    cout << "Search Cost of Optimal BST is " << cost  << endl;
-
-
-    stop = chrono::high_resolution_clock::now();
-    duration = chrono::duration<double>(stop - start);
-    cout << "Time taken to find and build optimal BST is " << duration.count() << " second" << endl;
-
+    // since nodes are too much, it is hard to print, so removed.
+    /*
     cout << endl;
     cout << "Printing BST: " << endl;
     cout << "Root----------------->Leaf" << endl;
-    optimal_tree->print(optimal_tree->root,"",false);
+    optimal_tree->print(optimal_tree->root,"",false); 
+    */
     return 0;
 }

@@ -10,3 +10,7 @@ We will build an Optimal BST using dynamic programming based off of what we lear
 
 We are also going to implement adding new keys in tree, and update values based on frequency of user input.
 Finally, we are going to implement both cases in one case to see if it can make big difference.
+
+# How to Run
+Make will make executable program, and can run using ./main. this main contains 5 nodes with fixed frequency, and 100, 500, 1000 nodes with random frequencies.
+100 nodes will take around 0.03, 500 nodes will take 4, and 1000 will take around 35 seconds.
