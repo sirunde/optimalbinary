@@ -143,6 +143,8 @@ int main()
     // kf is class for holding key and freq same time
     auto start = chrono::high_resolution_clock::now();
     vector<kf> kfs;
+
+    cout << "Test Case Size 5" << endl;
     kfs.push_back(kf("A", 25));
     kfs.push_back(kf("B", 20));
     kfs.push_back(kf("C", 5));
@@ -172,6 +174,7 @@ int main()
     cout << "Printing BST: " << endl;
     cout << "Root----------------->Leaf" << endl;
     optimal_tree->print(optimal_tree->root,"",false);
+    cout << endl;
 
     // to do:
 
@@ -184,6 +187,7 @@ int main()
     int te[] = {100,500,1000};
     for(auto j: te){
         testCase.clear();
+        cout << "Test Case Size " << j << endl;
         for(int i = 0; i < j;i++){
             char a = 'a';
             a += i;
@@ -204,6 +208,7 @@ int main()
         stop = chrono::high_resolution_clock::now();
         duration = chrono::duration<double>(stop - start);
         cout << "Time taken to find and build optimal BST is " << duration.count() << " second for " << j << " nodes" << endl;
+        cout << endl;
     }
     // since nodes are too much, it is hard to print, so removed.
     /*
